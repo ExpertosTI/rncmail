@@ -39,8 +39,11 @@ services:
       - ROUNDCUBEMAIL_DEFAULT_HOST=stalwart-mail
       - ROUNDCUBEMAIL_SMTP_SERVER=stalwart-mail
       - ROUNDCUBEMAIL_SKIN=elastic
+      - ROUNDCUBEMAIL_PRODUCT_NAME=Renace
+      - ROUNDCUBEMAIL_PAGE_TITLE=Renace
     volumes:
       - ./logo.svg:/var/www/html/skins/elastic/images/logo.svg
+      - ./logo.svg:/var/www/html/skins/elastic/images/favicon.ico
     networks:
       - RenaceNet
     depends_on:
