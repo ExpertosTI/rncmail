@@ -4,7 +4,8 @@ services:
   stalwart-mail:
     image: stalwartlabs/mail-server:latest
     container_name: stalwart-mail
-    restart: always
+    environment:
+      - RUST_LOG=info
     ports:
       - "25:25"
       - "465:465"
@@ -13,15 +14,18 @@ services:
       - "4190:4190"
       - "8081:8080"
     volumes:
-      - ./data:/opt/stalwart-mail/data
-      - ./etc:/opt/stalwart-mail/etc
-    environment:
-      - RUST_LOG=info
+      - rncmail_data:/opt/stalwart-mail/data
+      - rncmail_etc:/opt/stalwart-mail/etc
+    networks:
+      - RenaceNet
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
 
   roundcube:
     image: roundcube/roundcubemail:latest
     container_name: roundcube
-    restart: always
     ports:
       - "8080:80"
     environment:
@@ -30,8 +34,22 @@ services:
       - ROUNDCUBEMAIL_SKIN=elastic
     volumes:
       - ./logo.svg:/var/www/html/skins/elastic/images/logo.svg
+    networks:
+      - RenaceNet
     depends_on:
       - stalwart-mail
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+networks:
+  RenaceNet:
+    external: true
+
+volumes:
+  rncmail_data:
+  rncmail_etc:
 
 
 
