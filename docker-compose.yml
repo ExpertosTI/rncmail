@@ -11,10 +11,27 @@ services:
       - "587:587"
       - "993:993"
       - "4190:4190"
-      - "8080:8080"
+      - "8081:8080"
     volumes:
       - ./data:/opt/stalwart-mail/data
       - ./etc:/opt/stalwart-mail/etc
     environment:
       - RUST_LOG=info
+
+  roundcube:
+    image: roundcube/roundcubemail:latest
+    container_name: roundcube
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      - ROUNDCUBEMAIL_DEFAULT_HOST=stalwart-mail
+      - ROUNDCUBEMAIL_SMTP_SERVER=stalwart-mail
+      - ROUNDCUBEMAIL_SKIN=elastic
+    volumes:
+      - ./logo.svg:/var/www/html/skins/elastic/images/logo.svg
+    depends_on:
+      - stalwart-mail
+
+
 
