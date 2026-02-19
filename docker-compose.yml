@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  stalwart-mail:
+    image: stalwartlabs/mail-server:latest
+    container_name: stalwart-mail
+    restart: always
+    ports:
+      - "25:25"
+      - "465:465"
+      - "587:587"
+      - "993:993"
+      - "4190:4190"
+      - "8080:8080"
+    volumes:
+      - ./data:/opt/stalwart-mail/data
+      - ./etc:/opt/stalwart-mail/etc
+    environment:
+      - RUST_LOG=info
+
